@@ -1,0 +1,47 @@
+﻿@page "/films"
+@using Models
+@using Services
+@inject ISwapiService SwapiService
+
+<h1>Films</h1>
+
+@*<p>This component demonstrates fetching data from the server.</p>*@
+
+@if ( films == null )
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+                <tr class="main-header-grid">
+                    <th>Title</th>
+                    <th>Director</th>
+                    <th>Producer </th>
+                    <th>Release Date </th>
+                </tr>
+            </thead>
+        <tbody>
+        @foreach ( var film in films )
+        {
+            <tr  class="main-row-grid">
+                <td>@film.Title</td>
+                <td>@film.Director</td>
+                <td>@film.Producer</td>
+                <td>@film.ReleaseDate.ToShortDateString()</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    IEnumerable<Film> films = new List<Film>();
+    protected override async Task OnInitializedAsync()
+    {
+        films = await SwapiService.GetAllFilms();
+
+    }
+}

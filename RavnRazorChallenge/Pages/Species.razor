@@ -1,0 +1,47 @@
+﻿@page "/species"
+@using Models
+@using Services
+@inject ISwapiService SwapiService
+
+<h1>Species</h1>
+
+@*<p>This component demonstrates fetching data from the server.</p>*@
+
+@if ( species == null )
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+                <tr class="main-header-grid" >
+                    <th>Name</th>
+                    <th>Classification </th>
+                    <th>Designation</th>
+                    <th>Language</th>
+                </tr>
+            </thead>
+        <tbody>
+        @foreach ( var specie in species )
+        {
+            <tr class="main-row-grid">
+                <td>@specie.Name</td>
+                <td>@specie.Classification</td>
+                <td>@specie.Designation</td>
+                <td>@specie.Language</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    IEnumerable<Specie> species = new List<Specie>();
+    protected override async Task OnInitializedAsync()
+    {
+        species = await SwapiService.GetAllSpecies();
+
+    }
+}

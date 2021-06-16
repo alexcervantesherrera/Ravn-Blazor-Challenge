@@ -1,0 +1,147 @@
+﻿@page "/people"
+@using Models
+@using Services
+@inject ISwapiService SwapiService
+
+<h1>Character</h1>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+
+        <li @onclick="@(() => PaginaSeleccionada(1))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">1</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(2))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">2</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(3))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">3</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(4))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">4</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(5))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">5</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(6))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">6</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(7))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">7</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(8))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">8</span>
+
+        </li>
+        <li @onclick="@(() => PaginaSeleccionada(9))"
+            style="cursor:pointer;">
+
+            <span class="page-link" href="#">9</span>
+
+        </li>
+    </ul>
+</nav>
+
+@if ( people == null )
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr class="main-header-grid">
+                <th>Id</th>
+                <th>Name</th>
+                <th>BirthYear</th>
+                <th>EyeColor</th>
+                <th>Gender</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ( var person in people )
+            {
+                <tr class="main-row-grid">
+                <td>@person.id</td>
+                <a href="/persondetail/@person.id">
+                <td style="cursor:pointer;" class="page-link" href="">@person.Name</td>
+                </a>
+                <td>@person.BirthYear</td>
+                <td>@person.EyeColor</td>
+                <td>@person.Gender</td>
+            </tr>
+
+        }
+            </tbody>
+        </table>
+    }
+
+@code {
+
+
+    IEnumerable<Person> people = new List<Person>();
+    public int idPerson { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        people = await SwapiService.GetAllPeople( 1 );
+        @foreach (var person in people) {
+
+            string url = person.Url;
+            string b = string.Empty;
+
+            for (int i=0; i< url.Length; i++)
+            {
+                if (Char.IsDigit( url[i]))
+                    b += url[i];
+            }
+            if ( b.Length > 0 )
+                idPerson = int.Parse( b );
+            person.id = idPerson;
+        }
+
+    }
+
+    public async Task PaginaSeleccionada( int pagina )
+    {
+
+        people = await SwapiService.GetAllPeople( pagina );
+        @foreach (var person in people) {
+
+            string url = person.Url;
+            string b = string.Empty;
+
+            for (int i=0; i< url.Length; i++)
+            {
+                if (Char.IsDigit( url[i]))
+                    b += url[i];
+            }
+            if ( b.Length > 0 )
+                idPerson = int.Parse( b );
+            person.id = idPerson;
+        }
+    }
+
+}

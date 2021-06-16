@@ -1,0 +1,47 @@
+﻿@page "/planets"
+@using Models
+@using Services
+@inject ISwapiService SwapiService
+
+<h1>Planets</h1>
+
+@*<p>This component demonstrates fetching data from the server.</p>*@
+
+@if ( planets == null )
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+                <tr  class="main-header-grid">
+                    <th>Name</th>
+                    <th>Diameter </th>
+                    <th>Climate</th>
+                    <th>Terrain</th>
+                </tr>
+            </thead>
+        <tbody>
+        @foreach ( var planet in planets )
+        {
+            <tr class="main-row-grid">
+                <td>@planet.Name</td>
+                <td>@planet.Diameter</td>
+                <td>@planet.Climate</td>
+                <td>@planet.Terrain</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    IEnumerable<Planet> planets = new List<Planet>();
+    protected override async Task OnInitializedAsync()
+    {
+        planets = await SwapiService.GetAllPlanets();
+
+    }
+}

@@ -1,0 +1,47 @@
+﻿@page "/starships"
+@using Models
+@using Services
+@inject ISwapiService SwapiService
+
+<h1>Starships</h1>
+
+@*<p>This component demonstrates fetching data from the server.</p>*@
+
+@if ( starships == null )
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+                <tr  class="main-header-grid">
+                    <th>Name</th>
+                    <th>Starship Class</th>
+                    <th>Manufacturer</th>
+                    <th>Crew</th>
+                </tr>
+            </thead>
+        <tbody>
+        @foreach ( var starship in starships )
+        {
+            <tr class="main-row-grid">
+                <td>@starship.Name</td>
+                <td>@starship.StarshipClass</td>
+                <td>@starship.Manufacturer</td>
+                <td>@starship.Crew</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+
+    IEnumerable<Starship> starships = new List<Starship>();
+    protected override async Task OnInitializedAsync()
+    {
+        starships = await SwapiService.GetAllStarships();
+
+    }
+}

@@ -1,0 +1,65 @@
+﻿<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" href="">Ravn Star Wars Registry</a>
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+              @*  <img src="/Icons/star-wars.png" width="30" height="30" alt="">*@
+                <span  aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="films">
+                @*<img src="/Icons/movie-icon.png" width="30" height="30" alt="">*@
+                <span  aria-hidden="true"></span> Films
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="people">
+               @* <img src="/Icons/Master-Obi-Wan-icon.png" width="30" height="30" alt="">*@
+                <span  aria-hidden="true"></span> Character
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="starships">
+               @* <img src="/Icons/Millenium-Falcon-02-icon.png" width="30" height="30" alt="">*@
+                <span aria-hidden="true"></span> Starships
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="vehicles">
+                @*<img src="/Icons/Trade-Federation-Landing-Ship-icon.png" width="30" height="30" alt="">*@
+                <span  aria-hidden="true"></span> Vehicles
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="species">
+              @*  <img src="/Icons/Watto-icon.png" width="30" height="30" alt="">*@
+                <span aria-hidden="true"></span> Species
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="planets">
+              @*  <img src="/Icons/Space-Art-icon.png" width="30" height="30" alt="">*@
+                <span  aria-hidden="true"></span> Planets
+            </NavLink>
+        </li>
+    </ul>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

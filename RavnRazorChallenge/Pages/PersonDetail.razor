@@ -1,0 +1,137 @@
+﻿@page "/persondetail/{id:int}"
+@using Models
+@using Services
+@inject ISwapiService SwapiService
+
+@if ( person == null )
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h1>@person.Name</h1>
+    @foreach ( var item in specieList )
+    {
+        <span class="main-row-grid">@item.name from @planet.Name </span>
+     }
+    <br />
+    <br />
+    <span class="main-header">General Information</span>
+    <table class="table">
+        <tbody>
+            <tr>
+                <td class="main-row-grid">Eye Color</td>
+                <td class="main-row-grid-black">@person.EyeColor</td>
+            </tr>
+            <tr>
+                <td class="main-row-grid">Hair Color</td>
+                <td class="main-row-grid-black">@person.HairColor</td>
+            </tr>
+            <tr>
+                <td class="main-row-grid">Skin Color</td>
+                <td class="main-row-grid-black">@person.SkinColor</td>
+            </tr>
+            <tr>
+                <td class="main-row-grid">Birth Year</td>
+                <td class="main-row-grid-black">@person.BirthYear</td>
+            </tr>
+        </tbody>
+    </table>
+    <span class="main-header">Vehicles</span>
+    <table class="table">
+        <tbody>
+            @foreach ( var item in vehicleList )
+            {
+                <tr class="main-row-grid">
+                    <td>@item.name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; }
+    public int idVehicle { get; set; }
+    public int idSpecie{ get; set; }
+    public int Homeworld { get; set; }
+    Person person;
+    Vehicle vehicle;
+    Specie specie;
+    Planet planet;
+    VehicleDetailModel vehicleDetailModel;
+    SpecieDetailModel specieDetailModel;
+    public List<VehicleDetailModel> vehicleList = new List<VehicleDetailModel>();
+    public List<SpecieDetailModel> specieList = new List<SpecieDetailModel>();
+    protected override async Task OnInitializedAsync()
+    {
+        person = await SwapiService.GetPersonById( id );
+
+        foreach ( var vehicles in person.Vehicles )
+        {
+            string url = vehicles.ToString();
+            string b = string.Empty;
+
+            for ( int i = 0; i < url.Length; i++ )
+            {
+                if ( Char.IsDigit( url[i] ) )
+                    b += url[i];
+            }
+            if ( b.Length > 0 )
+                idVehicle = int.Parse( b );
+
+            vehicle = await SwapiService.GetVehicleById( idVehicle );
+            vehicleDetailModel = new VehicleDetailModel();
+            vehicleDetailModel.id = idVehicle;
+            vehicleDetailModel.url = vehicles;
+            vehicleDetailModel.name = vehicle.Name;
+            vehicleList.Add( vehicleDetailModel );
+
+        }
+
+        string urlspecie = person.Species.ToString();
+        string c = string.Empty;
+
+        for ( int i = 0; i < urlspecie.Length; i++ )
+        {
+            if ( Char.IsDigit( urlspecie[i] ) )
+                c += urlspecie[i];
+        }
+        if ( c.Length > 0 )
+        idSpecie = int.Parse( c );
+
+        specie = await SwapiService.GetSpecieById( idSpecie );
+        specieDetailModel = new SpecieDetailModel();
+        specieDetailModel.id = idSpecie;
+        specieDetailModel.url = specie.Url;
+        specieDetailModel.name = specie.Name;
+        specieList.Add( specieDetailModel );
+
+        string urlplanet = person.Homeworld;
+        string d = string.Empty;
+
+        for ( int i = 0; i < urlplanet.Length; i++ )
+        {
+        if ( Char.IsDigit( urlplanet[i] ) )
+        d += urlplanet[i];
+        }
+        if ( d.Length > 0 )
+        Homeworld = int.Parse( d );
+
+
+        planet = await SwapiService.GetPlanetById( Homeworld );
+      
+
+    }
+
+
+
+
+
+
+
+
+
+
+}
